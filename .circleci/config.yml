@@ -1,17 +1,23 @@
 version: 2.1
 
 jobs:
-  echo:
-    docker:
-      - image: cimg/base:stable
+  build:
+    shell: /bin/bash --login
+    machine: true
     steps:
       - run:
-          name: Greet
-          command: echo "I love ${COLOR} builds."
-          environment:
-            COLOR: "green"
+          name: Check Python
+          command: |
+            command -v python
+            command -v pip
+            python --version
+            pip --version
+      - run:
+          name: Install dep
+          command: |
+             sudo pip install --index-url=https://pypi.python.org/simple/ nose
 
 workflows:
   main:
     jobs:
-      - echo
+      - build
