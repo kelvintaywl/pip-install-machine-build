@@ -3,7 +3,9 @@ version: 2.1
 jobs:
   build:
     shell: /bin/bash --login
-    machine: true
+    machine:
+      # See https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
+      image: ubuntu-2004:202107-02
     steps:
       - run:
           name: Check Python
@@ -15,21 +17,7 @@ jobs:
       - run:
           name: Install dep
           command: |
-             # when using `sudo` for pip install, we see errors like this:
-             # Downloading/unpacking nose
-             # Cannot fetch index base URL https://pypi.python.org/simple/
-             # Could not find any downloads that satisfy the requirement nose
-             #
-             # Opening the pip logs, I can see HTTP 403 errors due to SNI required, specifically:
-             # Downloading/unpacking nose
-             # Getting page https://pypi.python.org/simple/nose/
-             # Could not fetch URL https://pypi.python.org/simple/nose/: 403 Client Error: SNI is required
-             # Will skip URL https://pypi.python.org/simple/nose/ when looking for download links for nose
-             # 
-             # sudo pip install --index-url=https://pypi.python.org/simple/ nose
-             #
-             # I tried installing without sudo and it works well
-             pip install --index-url=https://pypi.python.org/simple/ nose
+             sudo pip install --index-url=https://pypi.python.org/simple/ nose
 
 workflows:
   main:
